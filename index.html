@@ -26,33 +26,61 @@
           return match && decodeURIComponent(match[1].replace(/\+/g, " "));
         }
         
-        var src = prompt("Please enter video src");
-        
+        var src = qs('src') || prompt("Please enter video src");
+        var id = btoa(src);
+
         if (src != null) {
           $('#video').attr('src',src);
           $('#video').load();
         }
-
+	
+	
         $('#video').on('play', function(){
-          socket.emit('chat message', 'play');
+          socket.emit('chat message', id + '#play#' + $('#video').get(0).currentTime);
+          return false;
+        });
+	
+        $('#video').on('seeked', function(){
+          socket.emit('chat message', id + '#seek#' + $('#video').get(0).currentTime);
           return false;
         });
 
         $('#video').on('pause', function(){
-          socket.emit('chat message', 'pause');
+          socket.emit('chat message', id + '#pause#' + $('#video').get(0).currentTime);
           return false;
         });
 
         socket.on('chat message', function(msg){
-          if (msg.indexOf('play') !== -1) {
+	  var parts = msg.split('#');
+          var _id = parts[0];
+          
+          if (_id !== id)
+            return;
+
+          var _action = parts[1];
+          var _time = parts[2] || 0;
+
+          $('#video').get(0).currentTime = Number(_time);
+	  
+          if (_action == 'play') {
             $('#video').get(0).play();
-          } else {
+          } else {            
             $('#video').get(0).pause();
           }
         });
 
       });
     </script>
+    <style>
+      body {
+        background: black;      
+      }
+
+      #video {
+        width: 100vw;
+        height: auto;
+      }
+    </style>
 <video id="video" controls>
   Your browser does not support the <code>video</code> element.
 </video>
