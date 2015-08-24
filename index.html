@@ -69,9 +69,9 @@
             var li = $('<li>');
             li.text(_time);
             if (_user == user) {
-              li.attr('color', 'rgba(180, 180, 180, .8)');
+              $(li).attr('color', 'rgba(180, 180, 180, .8)');
             }
-            $('#messages').append($('<li>').text(_time));
+            $('#messages').append(li);
             return;
           }
 
