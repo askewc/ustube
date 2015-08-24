@@ -66,6 +66,10 @@
           var _time = parts[3] || 0;
 	  
           if (_action == 'msg') {
+            var li = $('<li>').text(_time);
+            if (_user == user) {
+              li.attr('opacity', '.7');
+            }
             $('#messages').append($('<li>').text(_time));
             return;
           }
@@ -109,6 +113,10 @@
         bottom: 0;
         right: 0;
       }
+
+      #chat-button {
+        display: none;
+      }
     </style>
 <video id="video" controls>
   Your browser does not support the <code>video</code> element.
@@ -116,7 +124,8 @@
 <div id="chat-window">
 <form>
     <ul id="messages"></ul>
-    <input id="m" autocomplete="off" /><button id="chat-button">Send</button>
+    <input id="m" autocomplete="off" />
+    <button id="chat-button">Send</button>
 </form>
 </div>
   </body>
