@@ -28,7 +28,7 @@
         
         var src = qs('src') || prompt("Please enter video src");
         var id = btoa(src);
-        var user = Math.round(100 * Math.random()) + Date.now() + '' 
+        var user = 'user' + Math.round(100 * Math.random()) + Date.now() + '' 
             + Math.round(10000000 * Math.random());
 
         if (src != null) {
@@ -44,12 +44,6 @@
           return false;
         });
 	
-        $('#video').on('seeked', function(){
-          socket.emit('chat message', user + '#' + id + '#seek#' 
-              + $('#video').get(0).currentTime);
-          return false;
-        });
-
         $('#video').on('pause', function(){
           socket.emit('chat message', user + '#' + id + '#pause#' 
               + $('#video').get(0).currentTime);
@@ -70,12 +64,11 @@
 
           var _action = parts[2];
           var _time = parts[3] || 0;
-
-          $('#video').get(0).currentTime = Number(_time);
 	  
           if (_action == 'play') {
             $('#video').get(0).play();
-          } else {            
+            $('#video').get(0).currentTime = Number(_time);
+          } else if (_action == 'pause') {            
             $('#video').get(0).pause();
           }
         });
