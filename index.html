@@ -68,7 +68,7 @@
           if (_action == 'msg') {
             var li = $('<li>').text(_time);
             if (_user == user) {
-              li.attr('opacity', '.7');
+              li.attr('color', 'rgba(180, 180, 180, .8)');
             }
             $('#messages').append($('<li>').text(_time));
             return;
