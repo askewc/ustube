@@ -35,10 +35,8 @@
           $('#video').attr('src',src);
           $('#video').load();
         }
-	
-	
+		
         $('#video').on('play', function(){
-
           socket.emit('chat message', user + '#' + id + '#play#' 
               + $('#video').get(0).currentTime);
           return false;
@@ -67,9 +65,9 @@
 	  
           if (_action == 'play') {
             $('#video').get(0).play();
-            $('#video').get(0).currentTime = Number(_time);
           } else if (_action == 'pause') {            
             $('#video').get(0).pause();
+            $('#video').get(0).currentTime = Number(_time);
           }
         });
 
