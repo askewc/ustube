@@ -5,12 +5,11 @@
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      form { opacity: .8; padding: 3px; position: absolute; bottom: 0; left: 0; width: 100%;}
+      input { border: 0; padding: 10px; width: 85%; margin-right: .5%; }
+      button { width: 64px; background: rgb(130, 224, 255); border: none; padding: 10px; }
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
     </style>
   </head>
   <body>
@@ -35,7 +34,17 @@
           $('#video').attr('src',src);
           $('#video').load();
         }
-		
+
+	$('form').submit(function() {
+          if (!$('#m').val()) {
+            return false;
+          }
+          socket.emit('chat message', user + '#' + id + '#msg#' +
+               $('#m').val());
+          $('#m').val('');
+          return false;
+        });	
+
         $('#video').on('play', function(){
           socket.emit('chat message', user + '#' + id + '#play#' 
               + $('#video').get(0).currentTime);
@@ -50,19 +59,23 @@
 
         socket.on('chat message', function(msg){
 	  var parts = msg.split('#');
-
+          
           var _user = parts[0];
+          var _id = parts[1];
+          var _action = parts[2];
+          var _time = parts[3] || 0;
+	  
+          if (_action == 'msg') {
+            $('#messages').append($('<li>').text(_time));
+            return;
+          }
+
           if (_user == user)
             return;
-          
-          var _id = parts[1];
           
           if (_id !== id)
             return;
 
-          var _action = parts[2];
-          var _time = parts[3] || 0;
-	  
           if (_action == 'play') {
             $('#video').get(0).play();
           } else if (_action == 'pause') {            
@@ -80,15 +93,31 @@
         align-items: center;
         justify-content: center;
       }
-
+      
       #video {
         width: 100vw;
         height: auto;
 
       }
+
+      #chat-window {
+        width: 300px;
+        height: 100vh;
+        background: rgba(0,0,0,.5);
+        color: white;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+      }
     </style>
 <video id="video" controls>
   Your browser does not support the <code>video</code> element.
 </video>
+<div id="chat-window">
+<form>
+    <ul id="messages"></ul>
+    <input id="m" autocomplete="off" /><button id="chat-button">Send</button>
+</form>
+</div>
   </body>
 </html>
