@@ -1,11 +1,11 @@
 {
-  "name": "socket-chat-example",
+  "name": "us-tube",
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
-  "description": "my first socket.io app",
+  "description": "streaming with friends",
   "dependencies": {
     "express": "4.10.2",
     "socket.io": "1.2.0"
