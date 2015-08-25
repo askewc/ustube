@@ -7,7 +7,39 @@ $(function(){
     return match && decodeURIComponent(match[1].replace(/\+/g, " "));
   }
   
-  var src = qs('src') || prompt("Please enter video src");
+  // TODO (askewc): Move this PUT.io logic to its own js file.
+  var accessToken = localStorage.getItem("access_token");
+
+  if (window.location.href.indexOf('access_token') === -1 && !qs('error')) {
+    window.location = 'https://api.put.io/v2/oauth2/authenticate'
+        + '?client_id=' + putIOId
+        + '&response_type=token'
+        + '&redirect_uri=' + window.location.href;
+  } else if (window.location.href.indexOf('access_token') !== -1) {
+    accessToken = window.location.href.split('#access_token=')[1];
+    localStorage.setItem('access_token', accessToken);
+  }
+  
+  $.get('https://api.put.io/v2/files/search/*/page/1?oauth_token=' + accessToken
+      + '&type=iphone', function(response) { 
+    loadVideoOptions(response['files']);
+    
+  });  
+  
+  function loadVideoOptions(videos) {
+     videos.forEach(function(video) {
+       var $vidOption = $('<div class="vid-option">' + 
+           + '<img class="vid-option-icon" src="' + video.screenshot + '">'
+           + '<div class="vid-option-title">' + video.name + '</div>'
+           + '</div>');
+       // TODO (askewc): Add vid picker to view, and style.
+       $('#vid-picker').append($vidOption);
+       $vidOption.click(function() {
+         // TODO (askewc): Flesh this out?
+       });  
+     });
+  }
+  var src = qs('src');
   var id = btoa(src);
   var user = 'user' + Math.round(100 * Math.random()) + Date.now() + '' 
       + Math.round(10000000 * Math.random());
