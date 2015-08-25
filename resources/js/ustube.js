@@ -17,6 +17,15 @@ $(function(){
     $('#video').load();
   }
 
+  //To-do: Ask Cam if UX code should be in own dir
+  $('input').focus(function(){
+    $('#chat-window').addClass('isActive');
+  });
+
+  $('input').focusout(function(){
+    $('#chat-window').removeClass('isActive');
+  });
+
   $('form').submit(function() {
     if (!$('#m').val()) {
       return false;
@@ -30,12 +39,14 @@ $(function(){
   $('#video').on('play', function(){
     socket.emit('chat message', user + '#' + id + '#play#' 
         + $('#video').get(0).currentTime);
+    $('#chat-window').removeClass('isActive');
     return false;
   });
 
   $('#video').on('pause', function(){
     socket.emit('chat message', user + '#' + id + '#pause#' 
         + $('#video').get(0).currentTime);
+    $('#chat-window').addClass('isActive');
     return false;
   });
 
@@ -54,6 +65,7 @@ $(function(){
         $(li).css('color', 'rgba(180, 180, 180, .8)');
       }
       $('#messages').append(li);
+      $('input').focus();
       return;
     }
 
