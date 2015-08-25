@@ -2,132 +2,22 @@
 <html>
   <head>
     <title>Ustube</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-      form { opacity: .8; padding: 3px; position: absolute; bottom: 0; left: 0; width: 100%;}
-      input { border: 0; padding: 10px; width: 85%; margin-right: .5%; }
-      button { width: 64px; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-    </style>
+    <link rel="stylesheet" type="text/css" href="../css/ustube.css"/>     
   </head>
   <body>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script>
-      var socket = io();
-        
-      $(function(){
-        function qs(key) {
-          key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta chars
-          var match = location.search.match(new RegExp("[?&]"+key+"=([^&]+)(&|$)"));
-          return match && decodeURIComponent(match[1].replace(/\+/g, " "));
-        }
-        
-        var src = qs('src') || prompt("Please enter video src");
-        var id = btoa(src);
-        var user = 'user' + Math.round(100 * Math.random()) + Date.now() + '' 
-            + Math.round(10000000 * Math.random());
+    <script src="../js/ustube.js"></script>
 
-        if (src != null) {
-          $('#video').attr('src',src);
-          $('#video').load();
-        }
-
-	$('form').submit(function() {
-          if (!$('#m').val()) {
-            return false;
-          }
-          socket.emit('chat message', user + '#' + id + '#msg#' +
-               $('#m').val());
-          $('#m').val('');
-          return false;
-        });	
-
-        $('#video').on('play', function(){
-          socket.emit('chat message', user + '#' + id + '#play#' 
-              + $('#video').get(0).currentTime);
-          return false;
-        });
-	
-        $('#video').on('pause', function(){
-          socket.emit('chat message', user + '#' + id + '#pause#' 
-              + $('#video').get(0).currentTime);
-          return false;
-        });
-
-        socket.on('chat message', function(msg){
-	  var parts = msg.split('#');
-          
-          var _user = parts[0];
-          var _id = parts[1];
-          var _action = parts[2];
-          var _time = parts[3] || 0;
-	  
-          if (_action == 'msg') {
-            var li = $('<li>');
-            li.text(_time);
-            if (_user == user) {
-              $(li).css('color', 'rgba(180, 180, 180, .8)');
-            }
-            $('#messages').append(li);
-            return;
-          }
-
-          if (_user == user)
-            return;
-          
-          if (_id !== id)
-            return;
-
-          if (_action == 'play') {
-            $('#video').get(0).play();
-          } else if (_action == 'pause') {            
-            $('#video').get(0).pause();
-            $('#video').get(0).currentTime = Number(_time);
-          }
-        });
-
-      });
-    </script>
-    <style>
-      body {
-        background: black;      
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      
-      #video {
-        width: 100vw;
-        height: auto;
-
-      }
-
-      #chat-window {
-        width: 300px;
-        height: 100vh;
-        background: rgba(0,0,0,.5);
-        color: white;
-        position: fixed;
-        bottom: 0;
-        right: 0;
-      }
-
-      #chat-button {
-        display: none;
-      }
-    </style>
-<video id="video" controls>
-  Your browser does not support the <code>video</code> element.
-</video>
-<div id="chat-window">
-<form>
-    <ul id="messages"></ul>
-    <input id="m" autocomplete="off" autofocus />
-    <button id="chat-button">Send</button>
-</form>
-</div>
+    <video id="video" controls>
+      Your browser does not support the <code>video</code> element.
+    </video>
+    <div id="chat-window">
+    <form>
+        <ul id="messages"></ul>
+        <input id="m" autocomplete="off" autofocus />
+        <button id="chat-button">Send</button>
+    </form>
+    </div>
   </body>
 </html>
