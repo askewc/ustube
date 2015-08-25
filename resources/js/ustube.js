@@ -17,7 +17,6 @@ $(function(){
     $('#video').load();
   }
 
-  //To-do: Ask Cam if UX code should be in own dir
   $('input').focus(function(){
     $('#chat-window').addClass('isActive');
   });
