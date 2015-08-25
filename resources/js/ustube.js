@@ -6,6 +6,18 @@ $(function(){
     var match = location.search.match(new RegExp("[?&]"+key+"=([^&]+)(&|$)"));
     return match && decodeURIComponent(match[1].replace(/\+/g, " "));
   }
+
+  var accessToken = localStorage.getItem("access_token");
+
+  if (!qs('access_token') && !qs('error')) {
+    window.location = 'https://api.put.io/v2/oauth2/authenticate'
+        + '?client_id=2107'
+        + '&response_type=token'
+        + '&redirect_uri=' + encodeURIComponent(window.location.href);
+  } else if (qs('access_token')) {
+    accessToken = qs('access_token');
+    localStorage.setItem('access_token');
+  }
   
   var src = qs('src') || prompt("Please enter video src");
   var id = btoa(src);
