@@ -11,14 +11,15 @@ $(function(){
 
   if (!qs('access_token') && !qs('error')) {
     window.location = 'https://api.put.io/v2/oauth2/authenticate'
-        + '?client_id=2107'
+        + '?client_id=' + putIOId
         + '&response_type=token'
-        + '&redirect_uri=' + encodeURIComponent(window.location.href);
+        + '&redirect_uri=' + window.location.href;
   } else if (qs('access_token')) {
     accessToken = qs('access_token');
     localStorage.setItem('access_token');
   }
   
+  $.get('https://api.put.io/v2/files/list?oauth_token=' + access_token);  
   var src = qs('src') || prompt("Please enter video src");
   var id = btoa(src);
   var user = 'user' + Math.round(100 * Math.random()) + Date.now() + '' 
