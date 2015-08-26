@@ -11,7 +11,8 @@ body {
 }
 
 #video {
-  border: 1px solid gray;
+  width: 100vw;
+  height: auto;
 }
 
 #chat-window {
