@@ -7,7 +7,6 @@ app.set('port', process.env.PORT || 3000);
 app.set('keyFile', process.env.PUT_IO_KEY_FILE || 'DEV');
 
 app.get('/keys', function(req, res) {
-  console.log('sending key');
   res.sendFile(__dirname + '/put_io_keys/' + app.get('keyFile'));
 });
 
