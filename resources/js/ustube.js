@@ -7,6 +7,7 @@ $(function(){
     return match && decodeURIComponent(match[1].replace(/\+/g, " "));
   }
   
+<<<<<<< Updated upstream
   // TODO (askewc): Move this PUT.io logic to its own js file.
   var accessToken = localStorage.getItem("access_token");
 
@@ -50,6 +51,9 @@ $(function(){
      $('#vid-picker .content').width(videos.length * $('.vid-option').first().outerWidth());
   }
   var src = qs('src');
+=======
+  var src = qs('src') || prompt("Please enter video src");
+>>>>>>> Stashed changes
   var id = btoa(src);
   var user = 'user' + Math.round(100 * Math.random()) + Date.now() + '' 
       + Math.round(10000000 * Math.random());
@@ -59,6 +63,7 @@ $(function(){
     $('#video').load();
   }
 
+<<<<<<< Updated upstream
   $('input').focus(function(){
     $('#chat-window').addClass('isActive');
   });
@@ -67,6 +72,8 @@ $(function(){
     $('#chat-window').removeClass('isActive');
   });
 
+=======
+>>>>>>> Stashed changes
   $('form').submit(function() {
     if (!$('#m').val()) {
       return false;
@@ -80,14 +87,20 @@ $(function(){
   $('#video').on('play', function(){
     socket.emit('chat message', user + '#' + id + '#play#' 
         + $('#video').get(0).currentTime);
+<<<<<<< Updated upstream
     $('#chat-window').removeClass('isActive');
+=======
+>>>>>>> Stashed changes
     return false;
   });
 
   $('#video').on('pause', function(){
     socket.emit('chat message', user + '#' + id + '#pause#' 
         + $('#video').get(0).currentTime);
+<<<<<<< Updated upstream
     $('#chat-window').addClass('isActive');
+=======
+>>>>>>> Stashed changes
     return false;
   });
 
@@ -106,7 +119,10 @@ $(function(){
         $(li).css('color', 'rgba(180, 180, 180, .8)');
       }
       $('#messages').append(li);
+<<<<<<< Updated upstream
       $('input').focus();
+=======
+>>>>>>> Stashed changes
       return;
     }
 
@@ -124,4 +140,8 @@ $(function(){
     }
   });
 
+<<<<<<< Updated upstream
 });
+=======
+});
+>>>>>>> Stashed changes

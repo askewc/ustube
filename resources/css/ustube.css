@@ -1,6 +1,10 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 form { opacity: .8; padding: 3px; position: absolute; bottom: 0; left: 0; width: 100%;}
+<<<<<<< Updated upstream
 input { border: 0; padding: 10px; width: 100%;}
+=======
+input { border: 0; padding: 10px; width: 85%; margin-right: .5%; }
+>>>>>>> Stashed changes
 button { width: 64px; background: rgb(130, 224, 255); border: none; padding: 10px; }
 body {
   background: black;      
@@ -13,6 +17,10 @@ body {
 #video {
   width: 100vw;
   height: auto;
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 }
 
 #chat-window {
@@ -23,6 +31,7 @@ body {
   position: fixed;
   bottom: 0;
   right: 0;
+<<<<<<< Updated upstream
   transition: all 0.5s ease;
 }
 
@@ -36,6 +45,8 @@ body {
 #video:-webkit-full-screen ~ #chat-window:hover{
   opacity: 1;
   z-index: 2147483648;
+=======
+>>>>>>> Stashed changes
 }
 
 #chat-button {
@@ -47,6 +58,7 @@ body {
   margin: 0; 
   padding: 0; 
 }
+<<<<<<< Updated upstream
 
 #messages li { 
   padding: 5px 10px; 
@@ -107,3 +119,8 @@ body {
   opacity: 1;
 }
 
+=======
+#messages li { 
+  padding: 5px 10px; 
+}
+>>>>>>> Stashed changes
