@@ -1,6 +1,6 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 form { opacity: .8; padding: 3px; position: absolute; bottom: 0; left: 0; width: 100%;}
-input { border: 0; padding: 10px; width: 85%; margin-right: .5%; }
+input { border: 0; padding: 10px; width: 100%;}
 button { width: 64px; background: rgb(130, 224, 255); border: none; padding: 10px; }
 body {
   background: black;      
@@ -13,7 +13,6 @@ body {
 #video {
   width: 100vw;
   height: auto;
-
 }
 
 #chat-window {
@@ -52,3 +51,59 @@ body {
 #messages li { 
   padding: 5px 10px; 
 }
+
+#vid-picker {
+  transition: height .3s ease;
+  height: 40px;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  right: 300px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+#vid-picker:hover {
+ height: 120px;
+}
+
+#vid-picker .content {
+  position: relative;
+  left: 300px;
+  height: 100%;
+}
+
+
+.vid-option {
+  opacity: .4;
+  height: 100%;
+  width: 213px;
+  transition: opacity .3s ease;
+  cursor: pointer;
+  display: inline-block;
+  background-size: cover;
+  background-position: center bottom;
+  position: relative;
+  margin-left: 8px;
+  overflow: hidden;
+}
+
+.vid-option span {
+  background: rgba(0,0,0,.6);
+  color: white;
+  font-size: small;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all .3s ease;
+}
+
+.vid-option.selected span{
+ background-color: rgba(51,204,204, .6);
+}
+
+.vid-option:hover {
+  opacity: 1;
+}
+
