@@ -21,23 +21,33 @@ $(function(){
   }
   
   $.get('https://api.put.io/v2/files/search/*/page/1?oauth_token=' + accessToken
-      + '&type=iphone', function(response) { 
-    loadVideoOptions(response['files']);
-    
+      + '&type=iphone', function(response) {
+    var videos = [];
+    response.files.forEach(function(file) {
+      if (file.is_mp4_available) {
+        videos.push(file);
+      }
+    }); 
+    loadVideoOptions(videos);
   });  
   
   function loadVideoOptions(videos) {
      videos.forEach(function(video) {
-       var $vidOption = $('<div class="vid-option">' + 
-           + '<img class="vid-option-icon" src="' + video.screenshot + '">'
-           + '<div class="vid-option-title">' + video.name + '</div>'
+       var $vidOption = $('<div class="vid-option">' 
+           + '<span class="vid-option-title">' + video.name + '</span>'
            + '</div>');
+       $vidOption.css('background-image', 'url("' + video.screenshot + '")');
        // TODO (askewc): Add vid picker to view, and style.
-       $('#vid-picker').append($vidOption);
+       $('#vid-picker .content').append($vidOption);
        $vidOption.click(function() {
-         // TODO (askewc): Flesh this out?
-       });  
+         $('.vid-option.selected').removeClass('selected');
+         $(this).addClass('selected');
+         $('#video').attr('src', 'https://put.io/v2/files/' + video.id + '/stream');
+         $('#video').load();
+       });
      });
+
+     $('#vid-picker .content').width(videos.length * $('.vid-option').first().outerWidth());
   }
   var src = qs('src');
   var id = btoa(src);
