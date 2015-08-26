@@ -71,7 +71,7 @@ $(function(){
   });
 
   $('form').submit(function() {
-    if (!$('#m').val()) {
+    if (!$('#m').val() || !id) {
       return false;
     }
     socket.emit('chat message', user + '#' + id + '#msg#' +
@@ -81,6 +81,7 @@ $(function(){
   });	
 
   $('#video').on('play', function(){
+    if (!id) return;
     socket.emit('chat message', user + '#' + id + '#play#' 
         + $('#video').get(0).currentTime);
     $('#chat-window').removeClass('isActive');
@@ -88,6 +89,7 @@ $(function(){
   });
 
   $('#video').on('pause', function(){
+    if (!id) return;
     socket.emit('chat message', user + '#' + id + '#pause#' 
         + $('#video').get(0).currentTime);
     $('#chat-window').addClass('isActive');
@@ -101,7 +103,10 @@ $(function(){
     var _id = parts[1];
     var _action = parts[2];
     var _time = parts[3] || 0;
-
+    
+    if (_id !== id || !id)
+      return;
+    
     if (_action == 'msg') {
       var li = $('<li class="msg">');
       li.text(_time);
@@ -114,9 +119,6 @@ $(function(){
     }
 
     if (_user == user)
-      return;
-    
-    if (_id !== id)
       return;
 
     if (_action == 'play') {
