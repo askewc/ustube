@@ -1,5 +1,5 @@
 var socket = io();
-  
+var id = null; // Id of the video playing (base64'd src url)
 $(function(){
   function qs(key) {
     key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta chars
