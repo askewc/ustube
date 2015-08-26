@@ -1,5 +1,5 @@
 var socket = io();
-  
+var id = null; // Id of the video playing (base64'd src url)
 $(function(){
   function qs(key) {
     key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta chars
@@ -31,6 +31,14 @@ $(function(){
     loadVideoOptions(videos);
   });  
   
+  function setSrc(src) {
+    if (!src || src === $('#video').attr('src')) return;
+    $('#video').attr('src', src);
+    $('#video').load();
+    $('.msg').remove();
+    id = btoa(src);
+  }
+  
   function loadVideoOptions(videos) {
      videos.forEach(function(video) {
        var $vidOption = $('<div class="vid-option">' 
@@ -42,22 +50,17 @@ $(function(){
        $vidOption.click(function() {
          $('.vid-option.selected').removeClass('selected');
          $(this).addClass('selected');
-         $('#video').attr('src', 'https://put.io/v2/files/' + video.id + '/stream');
-         $('#video').load();
+         setSrc('https://put.io/v2/files/' + video.id + '/stream');
        });
      });
 
      $('#vid-picker .content').width(videos.length * $('.vid-option').first().outerWidth());
   }
-  var src = qs('src');
-  var id = btoa(src);
+  
+  setSrc(qs('src'));
+  
   var user = 'user' + Math.round(100 * Math.random()) + Date.now() + '' 
       + Math.round(10000000 * Math.random());
-
-  if (src != null) {
-    $('#video').attr('src',src);
-    $('#video').load();
-  }
 
   $('input').focus(function(){
     $('#chat-window').addClass('isActive');
@@ -68,7 +71,7 @@ $(function(){
   });
 
   $('form').submit(function() {
-    if (!$('#m').val()) {
+    if (!$('#m').val() || !id) {
       return false;
     }
     socket.emit('chat message', user + '#' + id + '#msg#' +
@@ -78,6 +81,7 @@ $(function(){
   });	
 
   $('#video').on('play', function(){
+    if (!id) return;
     socket.emit('chat message', user + '#' + id + '#play#' 
         + $('#video').get(0).currentTime);
     $('#chat-window').removeClass('isActive');
@@ -85,6 +89,7 @@ $(function(){
   });
 
   $('#video').on('pause', function(){
+    if (!id) return;
     socket.emit('chat message', user + '#' + id + '#pause#' 
         + $('#video').get(0).currentTime);
     $('#chat-window').addClass('isActive');
@@ -98,9 +103,12 @@ $(function(){
     var _id = parts[1];
     var _action = parts[2];
     var _time = parts[3] || 0;
-
+    
+    if (_id !== id || !id)
+      return;
+    
     if (_action == 'msg') {
-      var li = $('<li>');
+      var li = $('<li class="msg">');
       li.text(_time);
       if (_user == user) {
         $(li).css('color', 'rgba(180, 180, 180, .8)');
@@ -111,9 +119,6 @@ $(function(){
     }
 
     if (_user == user)
-      return;
-    
-    if (_id !== id)
       return;
 
     if (_action == 'play') {
