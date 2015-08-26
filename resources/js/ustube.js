@@ -31,10 +31,18 @@ $(function(){
     loadVideoOptions(videos);
   });  
   
+  var loadFromUrl = function(){
+    var src = prompt("Please enter video src");
+    setSrc(src);
+  };
+
   function setSrc(src) {
     if (!src || src === $('#video').attr('src')) return;
     $('#video').attr('src', src);
     $('#video').load();
+    var message = user + ' has loaded a new video. To join, add their video from the url ' + src;
+    socket.emit('chat message', user + '#' + id + '#msg#' +
+        message);
     $('.msg').remove();
     id = btoa(src);
   }
@@ -47,12 +55,16 @@ $(function(){
        $vidOption.css('background-image', 'url("' + video.screenshot + '")');
        // TODO (askewc): Add vid picker to view, and style.
        $('#vid-picker .content').append($vidOption);
+       
        $vidOption.click(function() {
          $('.vid-option.selected').removeClass('selected');
          $(this).addClass('selected');
          setSrc('https://put.io/v2/files/' + video.id + '/stream');
        });
+
      });
+
+     $('.vid-option:first-of-type').click(loadFromUrl);
 
      $('#vid-picker .content').width(videos.length * $('.vid-option').first().outerWidth());
   }
@@ -96,6 +108,7 @@ $(function(){
     return false;
   });
 
+  // TODO (imafeature): Make chat window scroll to new message upon receipt
   socket.on('chat message', function(msg){
     var parts = msg.split('#');
     
@@ -114,6 +127,7 @@ $(function(){
         $(li).css('color', 'rgba(180, 180, 180, .8)');
       }
       $('#messages').append(li);
+      // $('#messages').scrollTop = $('#messages').scrollHeight + li.height;
       $('input').focus();
       return;
     }
