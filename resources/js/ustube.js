@@ -31,6 +31,14 @@ $(function(){
     loadVideoOptions(videos);
   });  
   
+  function setSrc(src) {
+    if (!src || src === $('#video').attr('src')) return;
+    $('#video').attr('src', src);
+    $('#video').load();
+    $('.msg').remove();
+    id = btoa(src);
+  }
+  
   function loadVideoOptions(videos) {
      videos.forEach(function(video) {
        var $vidOption = $('<div class="vid-option">' 
@@ -42,22 +50,17 @@ $(function(){
        $vidOption.click(function() {
          $('.vid-option.selected').removeClass('selected');
          $(this).addClass('selected');
-         $('#video').attr('src', 'https://put.io/v2/files/' + video.id + '/stream');
-         $('#video').load();
+         setSrc('https://put.io/v2/files/' + video.id + '/stream');
        });
      });
 
      $('#vid-picker .content').width(videos.length * $('.vid-option').first().outerWidth());
   }
-  var src = qs('src');
-  var id = btoa(src);
+  
+  setSrc(qs('src'));
+  
   var user = 'user' + Math.round(100 * Math.random()) + Date.now() + '' 
       + Math.round(10000000 * Math.random());
-
-  if (src != null) {
-    $('#video').attr('src',src);
-    $('#video').load();
-  }
 
   $('input').focus(function(){
     $('#chat-window').addClass('isActive');
@@ -100,7 +103,7 @@ $(function(){
     var _time = parts[3] || 0;
 
     if (_action == 'msg') {
-      var li = $('<li>');
+      var li = $('<li class="msg">');
       li.text(_time);
       if (_user == user) {
         $(li).css('color', 'rgba(180, 180, 180, .8)');
