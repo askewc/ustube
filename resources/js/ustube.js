@@ -31,6 +31,13 @@ $(function(){
     loadVideoOptions(videos);
   });  
   
+  var loadFromUrl = function(){
+    var src = prompt("Please enter video src");
+    $('.vid-option.selected').removeClass('selected');
+    $('#video').attr('src',src);
+    $('#video').load();
+  }
+
   function loadVideoOptions(videos) {
      videos.forEach(function(video) {
        var $vidOption = $('<div class="vid-option">' 
@@ -39,16 +46,21 @@ $(function(){
        $vidOption.css('background-image', 'url("' + video.screenshot + '")');
        // TODO (askewc): Add vid picker to view, and style.
        $('#vid-picker .content').append($vidOption);
+       
        $vidOption.click(function() {
          $('.vid-option.selected').removeClass('selected');
          $(this).addClass('selected');
          $('#video').attr('src', 'https://put.io/v2/files/' + video.id + '/stream');
          $('#video').load();
        });
+
      });
+
+     $('.vid-option:first-of-type').click(loadFromUrl);
 
      $('#vid-picker .content').width(videos.length * $('.vid-option').first().outerWidth());
   }
+
   var src = qs('src');
   var id = btoa(src);
   var user = 'user' + Math.round(100 * Math.random()) + Date.now() + '' 
@@ -91,6 +103,14 @@ $(function(){
     return false;
   });
 
+  $('#video').on('load', function(){
+    var message = user + id + ' has loaded a new video. To join, add their video from the url ' + $('#video').attr('src');
+    socket.emit('chat message', user + '#' + id + '#msg#' +
+        message);
+    return false;
+  });
+
+  // TODO (imafeature): Make chat window scroll to new message upon receipt
   socket.on('chat message', function(msg){
     var parts = msg.split('#');
     
@@ -106,6 +126,7 @@ $(function(){
         $(li).css('color', 'rgba(180, 180, 180, .8)');
       }
       $('#messages').append(li);
+      // $('#messages').scrollTop = $('#messages').scrollHeight + li.height;
       $('input').focus();
       return;
     }
