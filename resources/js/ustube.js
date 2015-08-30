@@ -7,6 +7,7 @@ $(function(){
     return match && decodeURIComponent(match[1].replace(/\+/g, " "));
   }
   
+<<<<<<< Updated upstream
   // TODO (askewc): Move this PUT.io logic to its own js file.
   var accessToken = localStorage.getItem("access_token");
 
@@ -73,6 +74,9 @@ $(function(){
 <<<<<<< HEAD
 
   var src = qs('src');
+=======
+  var src = qs('src') || prompt("Please enter video src");
+>>>>>>> Stashed changes
   var id = btoa(src);
 =======
   
@@ -82,6 +86,15 @@ $(function(){
   var user = 'user' + Math.round(100 * Math.random()) + Date.now() + '' 
       + Math.round(10000000 * Math.random());
 
+<<<<<<< HEAD
+=======
+  if (src != null) {
+    $('#video').attr('src',src);
+    $('#video').load();
+  }
+
+<<<<<<< Updated upstream
+>>>>>>> master
   $('input').focus(function(){
     $('#chat-window').addClass('isActive');
   });
@@ -90,6 +103,8 @@ $(function(){
     $('#chat-window').removeClass('isActive');
   });
 
+=======
+>>>>>>> Stashed changes
   $('form').submit(function() {
     if (!$('#m').val() || !id) {
       return false;
@@ -104,7 +119,10 @@ $(function(){
     if (!id) return;
     socket.emit('chat message', user + '#' + id + '#play#' 
         + $('#video').get(0).currentTime);
+<<<<<<< Updated upstream
     $('#chat-window').removeClass('isActive');
+=======
+>>>>>>> Stashed changes
     return false;
   });
 
@@ -112,7 +130,10 @@ $(function(){
     if (!id) return;
     socket.emit('chat message', user + '#' + id + '#pause#' 
         + $('#video').get(0).currentTime);
+<<<<<<< Updated upstream
     $('#chat-window').addClass('isActive');
+=======
+>>>>>>> Stashed changes
     return false;
   });
 
@@ -142,8 +163,14 @@ $(function(){
         $(li).css('color', 'rgba(180, 180, 180, .8)');
       }
       $('#messages').append(li);
+<<<<<<< HEAD
       // $('#messages').scrollTop = $('#messages').scrollHeight + li.height;
+=======
+<<<<<<< Updated upstream
+>>>>>>> master
       $('input').focus();
+=======
+>>>>>>> Stashed changes
       return;
     }
 
@@ -158,4 +185,8 @@ $(function(){
     }
   });
 
+<<<<<<< Updated upstream
 });
+=======
+});
+>>>>>>> Stashed changes
