@@ -1,3 +1,4 @@
+
 var socket = io();
 var id = null; // Id of the video playing (base64'd src url)
 $(function(){
@@ -7,7 +8,6 @@ $(function(){
     return match && decodeURIComponent(match[1].replace(/\+/g, " "));
   }
   
-<<<<<<< Updated upstream
   // TODO (askewc): Move this PUT.io logic to its own js file.
   var accessToken = localStorage.getItem("access_token");
 
@@ -32,24 +32,22 @@ $(function(){
     loadVideoOptions(videos);
   });  
   
-<<<<<<< HEAD
   var loadFromUrl = function(){
     var src = prompt("Please enter video src");
-    $('.vid-option.selected').removeClass('selected');
-    $('#video').attr('src',src);
-    $('#video').load();
-  }
+    setSrc(src);
+  };
 
-=======
   function setSrc(src) {
     if (!src || src === $('#video').attr('src')) return;
     $('#video').attr('src', src);
     $('#video').load();
+    var message = user + ' has loaded a new video. To join, add their video from the url ' + src;
+    socket.emit('chat message', user + '#' + id + '#msg#' +
+        message);
     $('.msg').remove();
     id = btoa(src);
   }
   
->>>>>>> origin/review
   function loadVideoOptions(videos) {
      videos.forEach(function(video) {
        var $vidOption = $('<div class="vid-option">' 
@@ -71,30 +69,12 @@ $(function(){
 
      $('#vid-picker .content').width(videos.length * $('.vid-option').first().outerWidth());
   }
-<<<<<<< HEAD
-
-  var src = qs('src');
-=======
-  var src = qs('src') || prompt("Please enter video src");
->>>>>>> Stashed changes
-  var id = btoa(src);
-=======
   
   setSrc(qs('src'));
   
->>>>>>> origin/review
   var user = 'user' + Math.round(100 * Math.random()) + Date.now() + '' 
       + Math.round(10000000 * Math.random());
 
-<<<<<<< HEAD
-=======
-  if (src != null) {
-    $('#video').attr('src',src);
-    $('#video').load();
-  }
-
-<<<<<<< Updated upstream
->>>>>>> master
   $('input').focus(function(){
     $('#chat-window').addClass('isActive');
   });
@@ -103,8 +83,6 @@ $(function(){
     $('#chat-window').removeClass('isActive');
   });
 
-=======
->>>>>>> Stashed changes
   $('form').submit(function() {
     if (!$('#m').val() || !id) {
       return false;
@@ -113,16 +91,13 @@ $(function(){
          $('#m').val());
     $('#m').val('');
     return false;
-  });	
+  }); 
 
   $('#video').on('play', function(){
     if (!id) return;
     socket.emit('chat message', user + '#' + id + '#play#' 
         + $('#video').get(0).currentTime);
-<<<<<<< Updated upstream
     $('#chat-window').removeClass('isActive');
-=======
->>>>>>> Stashed changes
     return false;
   });
 
@@ -130,17 +105,7 @@ $(function(){
     if (!id) return;
     socket.emit('chat message', user + '#' + id + '#pause#' 
         + $('#video').get(0).currentTime);
-<<<<<<< Updated upstream
     $('#chat-window').addClass('isActive');
-=======
->>>>>>> Stashed changes
-    return false;
-  });
-
-  $('#video').on('load', function(){
-    var message = user + id + ' has loaded a new video. To join, add their video from the url ' + $('#video').attr('src');
-    socket.emit('chat message', user + '#' + id + '#msg#' +
-        message);
     return false;
   });
 
@@ -163,14 +128,8 @@ $(function(){
         $(li).css('color', 'rgba(180, 180, 180, .8)');
       }
       $('#messages').append(li);
-<<<<<<< HEAD
       // $('#messages').scrollTop = $('#messages').scrollHeight + li.height;
-=======
-<<<<<<< Updated upstream
->>>>>>> master
       $('input').focus();
-=======
->>>>>>> Stashed changes
       return;
     }
 
@@ -185,8 +144,4 @@ $(function(){
     }
   });
 
-<<<<<<< Updated upstream
 });
-=======
-});
->>>>>>> Stashed changes
