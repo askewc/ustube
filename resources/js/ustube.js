@@ -87,7 +87,6 @@ $(function(){
     return false;
   });
 
-  // TODO (imafeature): Make chat window scroll to new message upon receipt
   socket.on('chat message', function(msg){
     var parts = msg.split('#');
     
@@ -105,8 +104,11 @@ $(function(){
       if (_user == user) {
         $(li).css('color', 'rgba(180, 180, 180, .8)');
       }
+
       $('#messages').append(li);
-      // $('#messages').scrollTop = $('#messages').scrollHeight + li.height;
+      var theBottom = document.getElementById('messages').scrollHeight;
+      $('#chat-window').scrollTop(theBottom);
+      console.log($('#chat-window').scrollTop());
       $('input').focus();
       return;
     }
